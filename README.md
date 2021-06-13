@@ -35,7 +35,7 @@ Für Produktiveinsatz ggf. selbst erledigen: Anbindung des Flaskservers per z. B
 
 # Dateistruktur
 
-* `app.py`: Entrypoint (`app:main`)
+* `app.py`: Startet Flaskserver (`app:main`)
 * `setup.py`: Legt Datenbank an
 
 ## `db/`: Datenbank
