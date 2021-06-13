@@ -28,7 +28,7 @@ Per Voreinstellung sind sinnvolle Vorgaben für dezentral / remote arbeitende Te
 
 Auf dem Mac ist ggf. `pip3` und `python3` zu benutzen. 
 
-Flask läuft voreingestellt auf `Port 2400` im Debugmodus (`app.py`). Template werden bei Veränderungen aktualisiert (app.config['TEMPLATES_AUTO_RELOAD']` in `src/init.py`)
+Flask läuft voreingestellt auf `Port 2400` im Debugmodus (`app.py`). Template werden bei Veränderungen aktualisiert (`app.config['TEMPLATES_AUTO_RELOAD']` in `src/init.py`)
 
 Für Produktiveinsatz ggf. selbst erledigen: Anbindung des Flaskservers per z. B. uWSGI an den Webserver.
 
