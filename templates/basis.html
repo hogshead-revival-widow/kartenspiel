@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+
+    <!-- Titel -->
+    <title>{% block titel_seite %}{% endblock %}</title>
+
+    <!-- Bootstrap: CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}">
+    <!-- Anpassungen: CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/zusatz.css') }}">
+    {% block head_skript %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark mb-4" style="background-color: rgb(7, 37, 85);">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    Kartenspiel
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        {% if navbar_leeren is not defined or navbar == none or
+                        navbar_leeren == false %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index')}}">Neues Spiel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('karte', karten_id='alle')}}">Alle Karten</a>
+                        </li>
+                        {% if session.get('sitzung') != none and sitzung is defined and request.path != "/" and not "einladung" in request.path %}
+                        <li>
+                            <a href="#einladungModal" role="button" class="nav-link" data-bs-toggle="modal"
+                                data-bs-target="#einladungModal">
+                                {% if 'ist_moderiert' in sitzung.optionen %}
+                                Moderation abgeben
+                                {% else %}
+                                Mitspieler*innen einladen
+                                {% endif %}
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if session.get('sitzung') != none and request.path != "/" %}
+                        <li>
+                            <a href="#ansicht" role="button" class="nav-link" onclick="karten_ansicht_aendern()">
+                                Karten-Ansicht wechseln
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">Verwaltung</a>
+                        </li>
+                        {% endif %}
+                        {% block navbar %}{% endblock %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Inhalt -->
+    <main>
+        {% block inhalt %}{% endblock %}
+    </main>
+    {% if session.get('sitzung') != none and sitzung is defined and request.path != "/" and not "einladung" in
+    request.path %}
+    <!-- Modal: Einladung -->
+    <aside class="modal fade" id="einladungModal" tabindex="-1" aria-labelledby="einladungModalLabel"
+        aria-hidden="true">
+        <article class="modal-dialog">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h5 class="modal-title" id="einladungModalLabel">
+                        {% if 'ist_moderiert' in sitzung.optionen %}
+                        Moderation abgeben
+                        {% else %}
+                        Mitspieler*innen einladen
+                        {% endif %}
+                    </h5>
+                    <nav>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+                    </nav>
+                </header>
+                <div class="modal-body">
+                    <p>
+                        {% if 'ist_moderiert' in sitzung.optionen %}
+                        Mit diesem Link kannst Du die Moderation abgeben oder zu einem späteren Zeitpunkt wieder
+                        aufgreifen.
+                        {% else %}
+                        Kopiere den folgenden Link und verteile ihn an die Mitspieler*innen.
+                        {% endif %}
+                    </p>
+                    <form class="input-group m-3">
+                        <button class="btn btn-primary text-white" id="button" onclick="kopiere(einladung)"
+                            data-bs-dismiss="modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-clipboard" viewBox="0 0 16 16">
+                                <path
+                                    d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                                <path
+                                    d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+                            </svg></button>
+                        <input type="text" id="einladung" class="form-control-sm w-75"
+                            value="{{ url_for('einladung', sitzung_id=sitzung.sitzung_id, _external=True) }}"
+                            aria-describedby="kopiere" readonly>
+                    </form>
+                    <footer class="modal-footer">
+                        <nav>
+                            <button type="button" class="btn btn-primary text-white" onclick="kopiere(einladung)"
+                                data-bs-dismiss="modal">Link kopieren</button>
+                        </nav>
+                    </footer>
+                </div>
+            </div>
+        </article>
+    </aside>
+    {% endif %}
+    <!-- Bootstrap: JS -->
+    <script src="{{ url_for('static',filename='js/bootstrap.bundle.js') }}"></script>
+    <!-- Eigene Zusätze: JS -->
+    <script src="{{ url_for('static', filename='js/zusatz.js') }}"></script>
+</body>
+
+</html>

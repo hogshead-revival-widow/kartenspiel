@@ -1,0 +1,14 @@
+{% extends "basis.html" %}
+{% block titel_seite %}Fehler: Seite nicht gefunden (404){% endblock %}
+{% block inhalt %}
+<article class="m-3 w-75">
+    <header>
+        <h1>Seite nicht gefunden.</h1>
+    </header>
+    <p class="lead text-muted">Kann es sein, dass Du
+        ein altes Spiel aufrufen wolltest?<br /> Spiele werden nach einer gewissen Zeit gelöscht.</p>
+    <p class="lead text-muted">
+        Beginne doch einfach ein <a href="{{ url_for('index') }}">neues Spiel.</a></p>
+</article>
+
+{% endblock %}

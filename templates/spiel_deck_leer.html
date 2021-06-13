@@ -1,0 +1,76 @@
+{% extends "basis.html" %}
+{% block titel_seite %}
+{% if not letzte_karte is defined %}
+Spiel vorbei: Deck leer
+{% else %}
+Spiel vorbei: Letzte Karte
+{% endif %}
+{% endblock %}
+{% block inhalt %}
+<section class="w-75 p-3">
+    <article>
+        <header>
+            <h1>{% if not letzte_karte is defined %}
+                Spiel vorbei: Deck leer
+                {% else %}
+                Spiel vorbei: Letzte Karte
+                {% endif %}
+            </h1>
+        </header>
+        
+        {% if not letzte_karte is defined %}
+        <p class="lead text-muted">Leider sind bereits alle Karten verteilt. Damit ist jetzt auch der Einladungs-Link ungültig.
+            Beginne ein <a href="{{ url_for('index')}}">neues Spiel</a>, wenn Du noch einmal spielen möchtest.
+        </p>
+        {% endif %}
+        {% if letzte_karte is defined %}
+        <p class="lead text-muted">
+            Letzte Karte: Zwei Karten gab es zwar nicht mehr. Das hier ist aber die letzte Karte, die noch übrig war.
+        </aside>
+            {% set karte = letzte_karte %}
+            {% include "karte_basis.html" %}
+        {% endif %}
+
+        {% if gespielte_karten is defined and gespielte_karten != none and gespielte_karten|length > 0 %}
+        <div class="form-check form-switch {% if letzte_karte is defined %} mt-5 {% endif %}">
+            <input class="form-check-input" data-bs-toggle="collapse" data-bs-target=".multi-collapse"
+                aria-expanded="false" aria-controls="gespielt-kopf gespielte_karten gespielt-kopf" type="checkbox"
+                id="gespielte_karten_anzeigen">
+            <label class="form-check-label text-muted lead" for="gespielte_karten_anzeigen">Alle gezogenen Karten
+                anzeigen</label>
+        </div>
+        {% endif %}
+    </article>
+
+    {% if gespielte_karten is defined and gespielte_karten != none 
+        and gespielte_karten|length > 0 %}
+    <section>
+        <header>
+            <h3 id="gespielt-kopf" class="collapse multi-collapse mt-3">Gezogene Karten ({{ gespielte_karten|length }})</h3>
+        </header>
+        <div id="gespielte_karten" class="carousel carousel-dark  collapse multi-collapse" data-bs-interval="false">
+            <div class="carousel-inner">
+                {% for karte in gespielte_karten %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    {% include "karte_basis.html" %}
+                </div>
+                {% endfor %}
+            </div>
+            <nav>
+                <button class="carousel-control-prev" type="button" data-bs-target="#gespielte_karten"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Vorherige Karte</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#gespielte_karten"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Nächste Karte</span>
+                </button>
+            </nav>
+        </div>
+    </section>
+        {% endif %}
+</section>
+
+{% endblock %}

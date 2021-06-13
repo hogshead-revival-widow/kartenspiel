@@ -1,0 +1,52 @@
+{% extends "basis.html" %}
+{% block titel_seite %}Karte: {{ karte.name }}{% endblock %}
+{% block inhalt %}
+<div class="container">
+    {% if nur_anzeige == false %}
+    {% if stapel_gewechselt is defined and stapel_gewechselt == true %}
+    <aside class="toast position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true"
+        id="stapel-leer-toast" data-bs-delay="8000">
+        <header class="toast-header">
+            <img src="/static/favicons/favicon-16x16.png" class="rounded me-2">
+            <strong class="me-auto">Stapel gewechselt</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Schließen"></button>
+        </header>
+        <div class="toast-body">
+            Der {% if stapel_leer == 'person' %}Personen-{% else %}Leitsatz-{% endif
+            %} Stapel ist leer. Aber im anderem Stapel gab es noch Karten.
+        </div>
+    </aside>
+    {% endif %}
+
+    <nav class="text-center">
+        <header>
+            <h4 class="text-muted">Die Karte passt nicht?</h4>
+        </header>
+        <form action="{{ url_for('ziehe') }}" method="POST">
+            <input name="einzelkarte" type="hidden" value="einzelkarte" />
+            <input name="karte_zurueck" type="hidden" value="{{ karte.id }}" />
+            {% if 'zwei_stapel' in sitzung.optionen %}
+            {% for stapel in stapel.zwei_stapel %}
+            {% if stapel == 'person' and stapel_leer != 'person' %}
+            <button name="stapel" class="btn btn-lg btn-outline-dark m-3" value="{{ stapel }}">
+                {%if 'zwei_karten' in sitzung.optionen %} Zwei Personen{% else %}Person{% endif %}
+                ziehen&nbsp;&raquo;</a>
+                {% elif stapel == 'leitsatz' and stapel_leer != 'leitsatz' %}
+                <button name="stapel" class="btn btn-lg btn-outline-dark" value="{{ stapel }}">
+                    {%if'zwei_karten' in sitzung.optionen %} Zwei Leitsätze{% else %}Leitsatz{% endif %}
+                    ziehen&nbsp;&raquo;</button>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                <button name="stapel" class="btn btn-lg btn-outline-dark m-3" value="alle">{%if'zwei_karten'
+                    in sitzung.optionen %} Zwei Karten ziehen{% else %}Ziehen{% endif %}&nbsp;&raquo;</a>
+                    {% endif %}
+        </form>
+    </nav>
+    {% endif %}
+    <div class="p-1">
+        {% include "karte_basis.html" %}
+    </div>
+
+</div>
+{% endblock %}

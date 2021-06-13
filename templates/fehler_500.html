@@ -1,0 +1,13 @@
+{% extends "basis.html" %}
+{% block titel_seite %}Fehler: Serverfehler (501){% endblock %}
+{% block inhalt %}
+<article class="m-3 w-75">
+    <header>
+        <h1>Fehler.</h1>
+    </header>
+    <p class="lead text-muted w-75">Kann es sein, dass Du
+        ein altes Spiel aufrufen wolltest oder Aktionen ausführen wolltest, die ein laufendes Spiel voraussetzen (z. B. 'ziehe')?</p>
+    <p class="lead text-muted">
+        Workaround: Beginne einfach ein <a href="{{ url_for('index') }}">neues Spiel.</a></p>
+</article>
+{% endblock %}

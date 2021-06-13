@@ -1,0 +1,39 @@
+{% if session is defined and session.sitzung is defined and session.sitzung.optionen is defined and 'ansicht_schlicht'
+in session.sitzung.optionen %}
+<!-- Karte -->
+<article {% if not karten is defined %} {% if stapel_gewechselt is not defined or stapel_gewechselt==false %} {% endif
+    %}{% endif %}
+    class="card  text-start mx-auto {%if alle is not defined%}w-75{%endif%} {% if karte_klasse_zusatz is defined  %}{{ karte_klasse_zusatz }}{% endif %}"
+    style="border-radius: 5%;">
+    <img src="{{ url_for('static', filename='img/'+ karte.bild_datei) }}" class="card-img karte-schlicht"
+        style="border-radius: 5% 5% 0% 0%;">
+    <div class="card-body">
+        <h5 class="card-title">{{ karte.name }}</h5>
+        {% if karte.eigenschaften is defined and karte.eigenschaften != none and karte.eigenschaften != "" %}
+        <p class="card-text">{{ karte.eigenschaften|safe }}</p>
+        {% endif %}
+        <p class="card-text lead">{{ karte.kurzbeschreibung|safe }}</p>
+    </div>
+</article>
+{% else %}
+<article {% if not karten is defined %} {% if stapel_gewechselt is not defined or stapel_gewechselt==false %} id="fokus"
+    {% endif %}{% endif %}
+    class="card text-white  mx-auto plastisch text-start {% if karte_klasse_zusatz is defined  %}{{ karte_klasse_zusatz }}{% endif %}">
+    <img class="card-img karte" src="{{ url_for('static', filename='img/'+ karte.bild_datei) }}" style="border-radius: 3%;">
+    <div class="card-img-overlay d-flex">
+        <div class="card-text mt-auto" style="max-width: 80%;"> 
+            <header>
+                <h2 class="card-title lesbar p-2 ps-3 pe-3">{{ karte.name }}</h2>
+            </header>
+            {% if karte.eigenschaften is defined and karte.eigenschaften != none and
+            karte.eigenschaften != "" %}
+            <p class="card-text lesbar p-2 ps-3 pe-3" style="text-transform: uppercase; display: inline-block;">{{ karte.eigenschaften|safe }}</p>
+            {% endif %}
+             {% if karte.kurzbeschreibung is defined and karte.kurzbeschreibung != none and
+            karte.kurzbeschreibung != "" %}
+            <h4 class="card-text lesbar p-2 ps-3 pe-3" style="display: block;">{{ karte.kurzbeschreibung|safe }}</h4>
+            {% endif %}
+        </div>
+    </div>
+</article>
+{% endif %}

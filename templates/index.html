@@ -1,0 +1,72 @@
+{% extends "basis.html" %}
+{% block titel_seite %}Kartenspiel{% endblock %}
+{% block inhalt %}
+{% if nicht_erlaubt is defined and nicht_erlaubt == true %}
+    <aside id="fokus" class="alert alert-success alert-dismissible fade show w-50 mx-auto" role="alert">
+        <strong>Die Aktion ist nicht möglich.</strong> Dein letztes Spiel ist beendet. Starte doch ein Neues.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </aside>
+{% endif %}
+<article class="row m-3 w-75">
+    <header>
+        <h1>Neues Spiel</h1>
+        <p class="lead">Wenn Du nichts einstellen willst, kannst Du auch <a href="{{ url_for('neu', einstellungen='standard')}}">direkt loslegen.</a></p>
+    </header>
+    <div class="container ms-5">
+        <form action="{{ url_for('neu')}}" method="POST">
+            <fieldset>
+                <legend>Spielregeln</legend>
+                <div class="row mt-3 form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="egal" aria-describedby="egal" checked>
+                    <label class="form-check-label" for="egal">Einstellungen sind mir egal</label>
+                    <div id="egal_hilfe" class="form-text" style="text-align: justify;">
+                        <p>Spring doch direkt zum Knopf unten, drauf drücken und festhalten.
+                            Falls es dir nicht ganz egal ist, das bedeutet diese Option: Eine Karte wird zufällig aus
+                            allen vorhandenen gezogen. Diese Option ist nicht mit weiteren Einstellungen kombinierbar. Unter <em>Präsentationsweise</em> kannst Du
+                            trotzdem ebenfalls wählen.</p>
+                    </div>
+                </div>
+                <div class="row mb-2 form-check form-switch">
+                    <input name="zwei_stapel" class="form-check-input" type="checkbox" id="zwei_stapel"
+                        aria-describedby="zwei_stapel_hilfe">
+                    <label class="form-check-label" for="zwei_stapel">Zwischen Stapeln wählen</label>
+                    <div id="zwei_stapel_hilfe" class="form-text" style="text-align: justify;">
+                        <p>Du kannst dir aussuchen, ob Du eine Karte aus dem <em>Person-</em> oder
+                            <em>Leitsatz</em>-Stapel ziehen möchtest.
+                            Ansonsten wird zufällig eine Karte aus einem der beiden Stapel gezogen.
+                        </p>
+                    </div>
+                </div>
+                <div class="row mb-2 form-check form-switch">
+                    <input name="zwei_karten" class="form-check-input" type="checkbox" id="zwei_karten"
+                        aria-describedby="zwei_karten_hilfe">
+                    <label class="form-check-label" for="zwei_karten">Zwei Karten ziehen</label>
+                    <div id="zwei_karten_hilfe" class="form-text" style="text-align: justify;">
+                        <p>Statt einer Karte ziehst Du zwei auf einmal. Du suchst aus, welche Du behalten möchtest.
+                            Empfiehlt sich nicht mit mehr als einer Handvoll Teilnehmer*innen oder kleinen Bildschirmen.</p>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Präsentationsweise </legend>
+                <div class="row mt-3  form-check form-switch">
+                    <input name="ist_moderiert" class="form-check-input" type="checkbox" id="ist_moderiert"
+                        aria-describedby="ist_moderiert_hilfe" checked>
+                    <label class="form-check-label" for="ist_moderiert">Moderiert</label>
+                    <div id="ist_moderiert_hilfe" class="form-text" style="text-align: justify;">
+                        <p>Du präsentierst das Spiel für deine Mitspieler*innen und teilst deinen Bildschirm. Es gibt keine
+                            Möglichkeit für diese, selbst zu ziehen. Ist die Option deaktiviert, erhältst Du einen Link, mit dem Du
+                            Mitspieler*innen einladen kannst. Karten, die Du nach dem Ziehen gegen neue tauscht, werden nicht in den Stapel gelegt,
+                            sondern aus dem Spiel genommen. Das eignet sich z. B., wenn ihr lieber im Team
+                            über die Karte sprechen wollt.</p>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="text-center">
+                <button type="submit" class="btn btn-lg btn-outline-dark">So spielen!</button>
+            </div>
+        </form>
+    </div>
+</article>
+
+{% endblock %}

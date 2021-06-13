@@ -1,0 +1,21 @@
+.lesbar {
+  display: table;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.88);
+  color: black;
+}
+
+.plastisch {
+  border-radius: 3%;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09), 0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09), 0 32px 16px rgba(0, 0, 0, 0.09);
+}
+
+.karte {
+  height: 70vh;
+  object-fit: fill;
+}
+
+.karte-schlicht {
+  height: 50vh;
+  object-fit: fill;
+}

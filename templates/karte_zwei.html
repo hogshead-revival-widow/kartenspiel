@@ -1,0 +1,59 @@
+{% extends "basis.html" %}
+{% set karten = karte %}
+{% block titel_seite %}Karten: {{ karte.0.name }} / {{ karte.1.name }}{% endblock %}
+{% block inhalt %}
+<div class="container">
+    {% if stapel_gewechselt is defined and stapel_gewechselt == true %}
+    <aside class="toast position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true"
+        id="stapel-leer-toast">
+        <header class="toast-header">
+            <img src="/static/favicons/favicon-16x16.png" class="rounded me-2">
+            <strong class="me-auto">Stapel gewechselt</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Schließen"></button>
+        </header>
+        <div class="toast-body">
+            Der {% if stapel_leer == 'person' %}Personen-{% else %}Leitsatz-{% endif
+            %} Stapel ist leer. Aber im anderem Stapel gab es noch Karten.
+        </div>
+    </aside>
+    {% endif %}
+
+    {% for karte in karten %}
+    <section class="text-center mx-auto zwei-karten">
+        <header {% if stapel_gewechselt is not defined or stapel_gewechselt == false and loop.first %} id="fokus" {% endif%}>
+            <h4 class="text-muted ">Karte #{{loop.index}}</h4>
+        </header>
+        {% if nur_anzeige == false %}
+        <nav class="col-6 mx-auto m-3">
+            <form class="input-group" action="{{ url_for('ziehe') }}" method="POST">
+                <input name="karte_zurueck" type="hidden" value="{{ karten.0.id }}" />
+                <input name="karte_zurueck_2" type="hidden" value="{{ karten.1.id }}" />
+                <select name="doppelkarte" class="form-select" id="zug" aria-label="Zug wählen: Karte #{{loop.index}}">
+                    {% if karten.0.id == karte.id %}
+                    {% set gib_zurueck = karten.1.id %}
+                    {% else %}
+                    {% set gib_zurueck = karten.0.id %}
+                    {% endif %}
+                    <option value="{{ karte.id }}, {{ gib_zurueck }}" selected>Nur diese Karte behalten</option>
+                    {% if 'zwei_stapel' in sitzung.optionen %}
+                    {% if stapel_leer != 'person' %}
+                    <option value="person">Beides ist nix: Zwei neue Personen ziehen</option>
+                    {% endif %}
+                    {% if stapel_leer != 'leitsatz' %}
+                    <option value="leitsatz">Beides ist nix: Zwei neue Leitsätze ziehen</option>
+                    {% endif %}
+                    {% else %}
+                    <option value="alle">Beides ist nix: Zwei neue Karten ziehen</option>
+                    {% endif%}
+                </select>
+                <button class="btn btn-lg btn-primary text-white">Zug spielen</button>
+            </form>
+        </nav>
+        {% endif %}
+        {% set karte_klasse_zusatz = "mb-5" %}
+        {% include "karte_basis.html" %}
+    </section>
+    {% endfor %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "basis.html" %}
+{% block titel_seite %}Alle Karten{% endblock %}
+{% block inhalt %}
+{% set alle = true %}
+<header class="m-3">
+    <h1>Alle Karten</h1>
+</header>
+<section class="container">
+    <article id="gespielte_karten" class="carousel" data-bs-interval="false">
+        <div class="carousel-inner">
+            {% for karte in karten %}
+            <div class="carousel-item  {% if loop.first %}active{% endif %}">
+                {% include "karte_basis.html" %}
+            </div>
+            {% endfor %}
+        </div>
+        <nav>
+            <button class="carousel-control-prev " type="button" data-bs-target="#gespielte_karten"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Vorherige Karte</span>
+            </button>
+            <button class="carousel-control-next " type="button" data-bs-target="#gespielte_karten"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Nächste Karte</span>
+            </button>
+        </nav>
+    </article>
+
+</section>
+{% endblock %}
